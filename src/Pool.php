@@ -30,6 +30,12 @@ class Pool extends AbstractPool
     protected $rabbitmqConfig;
 
     /**
+     * @var string
+     */
+    protected $mark;
+
+
+    /**
      * @return ConnectionInterface
      */
     public function createConnection(): ConnectionInterface
@@ -51,10 +57,16 @@ class Pool extends AbstractPool
             /* @var ConnectionManager $conManager */
             $conManager = BeanFactory::getBean(ConnectionManager::class);
 
-            $connection = $this->getConnection();
+            $connection = $conManager -> getConnection($this->mark);
 
-            $connection->setRelease(true);
-            $conManager->setConnection($connection);
+            if(empty($connection)){
+                $connection = $this->getConnection();
+
+                $connection->setRelease(true);
+                $conManager->setConnection($connection);
+            }
+
+
         } catch (Throwable $e) {
             throw new  Exception(
                 sprintf('Pool error is %s file=%s line=%d', $e->getMessage(), $e->getFile(), $e->getLine())
@@ -79,5 +91,13 @@ class Pool extends AbstractPool
     public function getRabbitmqConfig():  RabbitmqConfig
     {
         return $this->rabbitmqConfig;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMark() : string
+    {
+       return $this->mark;
     }
 }

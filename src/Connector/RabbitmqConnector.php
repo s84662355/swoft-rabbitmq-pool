@@ -9,6 +9,7 @@ use cjhswoftRabbitmq\Exception\RabbitmqException;
 use Swoft\Stdlib\Helper\Arr;
 use Swoft\Stdlib\Helper\JsonHelper;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use cjhswoftRabbitmq\AMQPSwooleConnection;
 /**
  * Class RabbitmqConnector
  *
@@ -21,12 +22,12 @@ class RabbitmqConnector implements ConnectorInterface
     /**
      * @param array $config
      *
-     * @return  AMQPStreamConnection
+     * @return  AMQPSwooleConnection
      */
-    public function connect(array $config):AMQPStreamConnection
+    public function connect(array $config):AMQPSwooleConnection
     {
 
-        $client = new AMQPStreamConnection($config['host'], $config['port'], $config['username'], $config['password'], $config['vhost']);
+        $client = new AMQPSwooleConnection($config['host'], $config['port'], $config['username'], $config['password'], $config['vhost']);
         return $client;
     }
 }

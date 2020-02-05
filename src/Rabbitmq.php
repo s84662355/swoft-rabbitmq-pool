@@ -28,10 +28,17 @@ class Rabbitmq
 
             /* @var Pool $rabbitmqPool */
             $rabbitmqPool  = BeanFactory::getBean($pool);
-            $connection = $rabbitmqPool->getConnection();
 
-            $connection->setRelease(true);
-            $conManager->setConnection($connection);
+
+            $connection = $conManager -> getConnection($rabbitmqPool->getMark());
+
+            if(empty($connection)){
+                $connection = $rabbitmqPool->getConnection();
+                $connection->setRelease(true);
+                $conManager->setConnection($connection);
+            }
+
+ 
         } catch (Throwable $e) {
             throw new RabbitmqException(
                 sprintf('Pool error is %s file=%s line=%d', $e->getMessage(), $e->getFile(), $e->getLine())

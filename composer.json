@@ -8,7 +8,7 @@
     "swoft",
     "rabbitmq"
   ],
-  "description": "swoft  rabbitmq-pool",
+  "description": "swoft  rabbitmq-pool   swoft框架的 rabbitmq 连接池 ",
   "license": "Apache-2.0",
   "require": {
     "swoft/framework": "~2.0.0",

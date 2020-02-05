@@ -33,16 +33,25 @@ class ConnectionManager
      */
     public function setConnection(ConnectionInterface $connection): void
     {
-        $key = sprintf('%d.%d.%d', Co::tid(), Co::id(), $connection->getId());
+        $key = sprintf('%d.%d.%d', Co::tid(), Co::id(),  $connection->getMark());
         $this->set($key, $connection);
+    }
+
+    /**
+     * @param string $mark
+     */
+    public function getConnection(string $mark)  
+    {
+         $key = sprintf('%d.%d.%d', Co::tid(), Co::id(),  $mark);
+         return $this->get($key);
     }
 
     /**
      * @param int $id
      */
-    public function releaseConnection(int $id): void
+    public function releaseConnection(string $mark): void
     {
-        $key = sprintf('%d.%d.%d', Co::tid(), Co::id(), $id);
+        $key = sprintf('%d.%d.%d', Co::tid(), Co::id(),$mark);
 
         $this->unset($key);
     }

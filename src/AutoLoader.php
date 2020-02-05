@@ -49,13 +49,14 @@ class AutoLoader extends SwoftComponent
                 'vhost'    => '/',
                 'username' => 'guest',
                 'password' => 'guest',
-                'option' => [
-                    
-                ],
+             
             ],
             'rabbitmq.pool' => [
                 'class'   => Pool::class,
-                'rabbitmqConfig' => bean('rabbitmq-config')
+                'rabbitmqConfig' => bean('rabbitmq-config'),
+                'mark'  => 'rabbitmq_pool',
+                'minActive' => 10,
+                'maxActive' => 10,
             ]
         ];
     }

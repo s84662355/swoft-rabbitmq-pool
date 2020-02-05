@@ -19,8 +19,8 @@ use cjhswoftRabbitmq\RabbitmqConfig;
 use cjhswoftRabbitmq\RabbitmqEvent;
 use Swoft\Stdlib\Helper\PhpHelper;
 use Throwable;
-use cjhswoftRabbitmq\RabbitmqConfig;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Channel\AMQPChannel;
 
 /**
  * Class Connection
@@ -29,6 +29,10 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
  */
 abstract class Connection extends AbstractConnection  
 {
+    /**
+     * @var string
+     */ 
+    private $mark ;
 
     /**
      * @var RabbitmqConfig
@@ -50,7 +54,16 @@ abstract class Connection extends AbstractConnection
         $this->rabbitmq_config  = $rabbitmq_config;
         $this->lastTime = time();
 
-        $this->id = $this->pool->getConnectionId();
+        $this->id =   $this->pool->getConnectionId();
+        $this->mark = $this->pool->getMark();
+    }
+
+    /**
+     * @return string
+     */
+    public function getMark() : string
+    {
+       return $this->mark;
     }
 
     /**
@@ -74,7 +87,7 @@ abstract class Connection extends AbstractConnection
         $config = [
             'host'           => $this->rabbitmq_config->getHost(),
             'port'           => $this->rabbitmq_config->getPort(),
-            'username'       => $this->rabbitmq_config->getUsername()
+            'username'       => $this->rabbitmq_config->getUsername(),
             'password'       => $this->rabbitmq_config->getPassword(),
             'vhost'          => $this->rabbitmq_config->getVhost(),
         ];
@@ -89,10 +102,19 @@ abstract class Connection extends AbstractConnection
      */
     public function release(bool $force = false): void
     {
-        $this->client->closeChannels();
+        $channels = $this->client->channels;
+        foreach($channels as $channel ){
+        	if($channel instanceof AMQPChannel ){
+                ////echo get_class($channel);
+             	$channel->close();
+        	}
+        	
+ 
+        }
+       
         /* @var ConnectionManager $conManager */
         $conManager = BeanFactory::getBean(ConnectionManager::class);
-        $conManager->releaseConnection($this->id);
+        $conManager->releaseConnection($this->mark);
         
 
         parent::release($force);
