@@ -1,7 +1,6 @@
 {
   "name": "chenjiahao/swoft-rabbitmq-pool",
   "type": "library",
-  "version": "v1.0.0",
   "keywords": [
     "php",
     "swoole",
