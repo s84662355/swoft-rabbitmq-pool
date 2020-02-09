@@ -43,4 +43,10 @@ class AMQPSwooleConnection extends AbstractConnection
     {
         return $this->io;
     }
+
+    public function setReadTimeOut($time_out = -1)
+    {
+         $this->io->setReadTimeOut($time_out );
+    }
+
 }

@@ -46,6 +46,8 @@ class RabbitmqConfig
      * @var string
      */
     private $password = 'guest';
+
+    
  
 
     /**

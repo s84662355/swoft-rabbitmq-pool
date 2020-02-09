@@ -293,4 +293,9 @@ class SwooleIO extends AbstractIO
     {
         return 1;
     }
+
+    public function setReadTimeOut($time_out = -1)
+    {
+          $this->readWriteTimeout = $time_out;
+    }
 }
